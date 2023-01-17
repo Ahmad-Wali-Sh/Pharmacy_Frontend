@@ -20,9 +20,7 @@ export default function Add() {
       .then((data) => setMedician(data));
   }, []);
   useEffect(() => {
-    axios
-      .get("http://127.0.0.1:8000/api/kind/")
-      .then((data) => setKind(data));
+    axios.get("http://127.0.0.1:8000/api/kind/").then((data) => setKind(data));
   }, []);
   useEffect(() => {
     axios
@@ -30,67 +28,88 @@ export default function Add() {
       .then((data) => setCountry(data));
   }, []);
   useEffect(() => {
-    axios
-      .get("http://127.0.0.1:8000/api/unit/")
-      .then((data) => setUnit(data));
+    axios.get("http://127.0.0.1:8000/api/unit/").then((data) => setUnit(data));
   }, []);
 
   const formatResult = (item) => {
     return (
       <>
         <div className="bar">
-         {item.image == null ? (
-            <div>Not an img</div>
+          {item.image == null ? (
+            <img className="bar-image" src={'/images/noimage.jpg'}></img>
           ) : (
             <img
               className="bar-image"
               src={item.image.substring(38)}
               alt={item.image}
             />
-          )} 
+          )}
           <div>
-          {kind.data.map(task => (
-                (task.id == item.kind && task.name == 'Capsul' ? <img className="bar-kind" src={'/images/capsul.png'} /> : "")
-          ))} 
-          {kind.data.map(task => (
-                (task.id == item.kind && task.name == 'sherbat' ? <img className="bar-kind" src={'/images/sherbat.png'} /> : "")
-          ))} 
-            </div>    
+            {kind.data.map((task) =>
+              task.id == item.kind && task.name == "Capsul" ? (
+                <img className="bar-kind" src={"/images/capsul.jpg"} />
+              ) : (
+                ""
+              )
+            )}
+            {kind.data.map((task) =>
+              task.id == item.kind && task.name === "sherbat" ? (
+                <img className="bar-kind" src={"/images/sherbat.jpg"} />
+              ) : (
+                ""
+              )
+            )}
+            {!item.kind && <img className="bar-image" src={'/images/noimage.jpg'}></img>}
+          </div>
           <div>
-        {country.data.map(place => (
-            place.id == item.country && place.name == 'Iran' ? <img className="bar-country" src={'/images/iran.jpg'} /> : ""
-        ))}
-        {country.data.map(place => (
-            place.id == item.country && place.name == 'Pakistan' ? <img className="bar-country" src={'/images/pakistan.jpg'} /> : ""
-        ))}
-        </div>
-        <div>
+            {country.data.map((place) =>
+              place.id == item.country && place.name == "Iran" ? (
+                <img className="bar-country" src={"/images/iran.jpg"} />
+              ) : (
+                ""
+              )
+            )}
+            {country.data.map((place) =>
+              place.id == item.country && place.name == "Pakistan" ? (
+                <img className="bar-country" src={"/images/pakistan.jpg"} />
+              ) : (
+               ""
+              )
+            )}
+            {!item.country && <img className="bar-image" src={'/images/noimage.jpg'}></img>}
+          </div>
+          <div>
             <div className="bar-container">
-            <div className="first-bar-container">
-            <span className="brand-name">{item.brand_name}</span>
-            <span>{item.ml} {unit.data.map(unit => (unit.id == item.unit && <span>{unit.name}</span>))}</span>
-            <span className="brand-name">{kind.data.map(kind => (kind.id == item.kind && kind.name))}</span>
-            <div>
-                <span className="brand-name">{item.location}</span>
+              <div className="first-bar-container">
+                <span className="brand-name">{item.brand_name}</span>
+                <span>
+                  {item.ml}{" "}
+                  {unit.data.map(
+                    (unit) => unit.id == item.unit && <span>{unit.name}</span>
+                  )}
+                </span>
+                <span className="brand-name">
+                  {kind.data.map((kind) => kind.id == item.kind && kind.name)}
+                </span>
+                <div>
+                  <span className="brand-name">{item.location}</span>
+                </div>
+                <div>
+                  <span className="generic-name">{item.generic_name}</span>
+                </div>
+                <div>
+                  <span className="generic-name">
+                    موجودی: {item.maximum_existence}
+                  </span>
+                </div>
+              </div>
+              <div className="flex-row">
+                <span className="price">&nbsp;</span>
+                <span className="price">قیمت: {item.price}</span>
+                <span className="price">تعداد در پاکت: {item.no_pocket}</span>
+              </div>
             </div>
-            <div>
-                <span className="generic-name">{item.generic_name}</span>
-            </div>
-            <div>
-                <span className="generic-name">موجودی: {item.maximum_existence}</span>
-            </div>
-            </div>
-            <div className="flex-row">
-            <span className="price">&nbsp;</span>
-            <span className="price">قیمت: {item.price}</span>
-            <span className="price">تعداد در پاکت: {item.no_pocket}</span>
-            </div>
-            </div>
-            
-            
-            
-        </div>
-
+          </div>
         </div>
       </>
     );
@@ -139,6 +158,7 @@ export default function Add() {
               placeholder="input the medician accordingly"
               formatResult={formatResult}
               showIcon={false}
+              maxResults={5}
             />
           </div>
         </Grid>

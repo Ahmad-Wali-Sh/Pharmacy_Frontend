@@ -112,17 +112,16 @@ body{
 .bar{
   height: 5rem;
   display: flex;
-  cursor: pointer
+  cursor: pointer;
 }
 
 .bar-image{
-  background-color: #252020;
   width: 5rem;
   height:5rem;
 }
 
 .bar-kind{
-  background-color: aquamarine;
+  background-color: rgb(152, 162, 159);
   width: 5rem;
   height: 5rem;
 }
