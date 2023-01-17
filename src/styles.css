@@ -108,3 +108,53 @@ body{
   padding: 10px;
   margin: 1rem;
 }
+
+.bar{
+  height: 5rem;
+  display: flex;
+  cursor: pointer
+}
+
+.bar-image{
+  background-color: #252020;
+  width: 5rem;
+  height:5rem;
+}
+
+.bar-kind{
+  background-color: aquamarine;
+  width: 5rem;
+  height: 5rem;
+}
+.bar-country{
+  background-color: rgb(50, 67, 61);
+  width: 5rem;
+  height: 5rem;
+}
+
+.brand-name {
+  padding: 0.5rem;
+  font-weight: bold;
+}
+
+.generic-name{
+  padding: 0.5rem;
+}
+
+.price{
+  padding-left: 5rem;
+}
+
+.bar-container{
+  display: flex;
+}
+
+.flex-row{
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+}
+
+.first-bar-container{
+  width: 11rem;
+}
