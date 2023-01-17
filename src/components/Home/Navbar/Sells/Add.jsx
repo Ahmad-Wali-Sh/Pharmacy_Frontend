@@ -60,6 +60,9 @@ export default function Add() {
         {country.data.map(place => (
             place.id == item.country && place.name == 'Iran' ? <img className="bar-country" src={'/images/iran.jpg'} /> : ""
         ))}
+        {country.data.map(place => (
+            place.id == item.country && place.name == 'Pakistan' ? <img className="bar-country" src={'/images/pakistan.jpg'} /> : ""
+        ))}
         </div>
         <div>
             <div className="bar-container">
