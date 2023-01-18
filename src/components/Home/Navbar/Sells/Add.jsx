@@ -32,11 +32,27 @@ export default function Add() {
   }, []);
 
   const formatResult = (item) => {
+    const kindMap = (kindName, url) => {
+      return kind.data.map((task) =>
+        task.id == item.kind && task.name == kindName
+          ? url && <img className="bar-kind" src={url} />
+          : ""
+      );
+    };
+
+    const countryMap = (countryName, url) => {
+      return country.data.map((task) =>
+        task.id == item.country && task.name == countryName
+          ? url && <img className="bar-image" src={url} />
+          : ""
+      );
+    };
+
     return (
       <>
         <div className="bar">
           {item.image == null ? (
-            <img className="bar-image" src={'/images/noimage.jpg'}></img>
+            <img className="bar-image" src={"/images/noimage.jpg"}></img>
           ) : (
             <img
               className="bar-image"
@@ -45,38 +61,42 @@ export default function Add() {
             />
           )}
           <div>
-            {kind.data.map((task) =>
-              task.id == item.kind && task.name == "Capsul" ? (
-                <img className="bar-kind" src={"/images/capsul.jpg"} />
-              ) : (
-                ""
+            {kind.data.map((itemer) =>
+              kindMap(
+                itemer.name,
+                itemer.name == "Capsul"
+                  ? "/images/capsul.jpg"
+                  : itemer.name == "Sharbat"
+                  ? "/images/sherbat.jpg"
+                  : itemer.name == "Tablet"
+                  ? "/images/tablet.jpg"
+                  : "/images/noimage.jpg"
               )
             )}
-            {kind.data.map((task) =>
-              task.id == item.kind && task.name === "sherbat" ? (
-                <img className="bar-kind" src={"/images/sherbat.jpg"} />
-              ) : (
-                ""
-              )
-            )}
-            {!item.kind && <img className="bar-image" src={'/images/noimage.jpg'}></img>}
           </div>
           <div>
-            {country.data.map((place) =>
-              place.id == item.country && place.name == "Iran" ? (
-                <img className="bar-country" src={"/images/iran.jpg"} />
-              ) : (
-                ""
+            {item.country == null ? (
+              <img className="bar-image" src={"/images/noimage.jpg"}></img>
+            ) : (
+              country.data.map((itemer) =>
+                countryMap(
+                  itemer.name,
+                  itemer.name == "Iran"
+                    ? "/images/iran.jpg"
+                    : itemer.name == "Pakistan"
+                    ? "/images/pakistan.jpg"
+                    : itemer.name == "Afghanistan"
+                    ? "/images/afghanistan.jpg" 
+                    : itemer.name == "India" 
+                    ? "/images/india.jpg" 
+                    : itemer.name == "Turkey"
+                    ? "/images/turkey.jpg"
+                    : itemer.name == "Chaina"
+                    ? "/images/china.jpg"
+                    : "/images/noimage.jpg"
+                )
               )
             )}
-            {country.data.map((place) =>
-              place.id == item.country && place.name == "Pakistan" ? (
-                <img className="bar-country" src={"/images/pakistan.jpg"} />
-              ) : (
-               ""
-              )
-            )}
-            {!item.country && <img className="bar-image" src={'/images/noimage.jpg'}></img>}
           </div>
           <div>
             <div className="bar-container">
