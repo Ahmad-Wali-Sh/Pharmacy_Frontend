@@ -13,6 +13,7 @@ export default function Add() {
   const [kind, setKind] = React.useState([]);
   const [country, setCountry] = React.useState([]);
   const [unit, setUnit] = React.useState([]);
+  const [list, setList] = React.useState([]);
 
   useEffect(() => {
     axios
@@ -30,6 +31,12 @@ export default function Add() {
   useEffect(() => {
     axios.get("http://127.0.0.1:8000/api/unit/").then((data) => setUnit(data));
   }, []);
+
+  const handleSelect = (item) => {
+    setList((prev) => [...prev, item]);
+  };
+
+  console.log(list);
 
   const formatResult = (item) => {
     const kindMap = (kindName, url) => {
@@ -86,9 +93,9 @@ export default function Add() {
                     : itemer.name == "Pakistan"
                     ? "/images/pakistan.jpg"
                     : itemer.name == "Afghanistan"
-                    ? "/images/afghanistan.jpg" 
-                    : itemer.name == "India" 
-                    ? "/images/india.jpg" 
+                    ? "/images/afghanistan.jpg"
+                    : itemer.name == "India"
+                    ? "/images/india.jpg"
                     : itemer.name == "Turkey"
                     ? "/images/turkey.jpg"
                     : itemer.name == "Chaina"
@@ -135,6 +142,9 @@ export default function Add() {
     );
   };
 
+  let sum = 0;
+  let number = 0;
+
   console.log(medician.data);
   console.log(kind.data);
   console.log(country.data);
@@ -179,7 +189,42 @@ export default function Add() {
               formatResult={formatResult}
               showIcon={false}
               maxResults={5}
+              onSelect={handleSelect}
             />
+            <div className="prescription-list">
+              {list != "" && (
+                <div className="flex-title">
+                  <h4>Brand Name</h4>
+                  <h4>Price</h4>
+                  <h4>Number</h4>
+                </div>
+              )}
+              {list.map((item) => (
+                <>
+                  <div className="flex">
+                    <h4 style={{ width: "5rem" }}>{item.brand_name}</h4>
+                    <h4 style={{ width: "2.3rem" }}>{item.price}</h4>
+                    <h4>{item.no_pocket}</h4>
+                  </div>
+                  <div className="hidden">{(sum += item.price)}</div>
+                  <div className="hidden">{(number += item.no_pocket)}</div>
+                </>
+              ))}
+              <div>
+                {list != "" && (
+                  <>
+                  <div className="flex-title">
+                    <h4 style={{ width: "4rem", marginLeft: "2rem" }}>Total</h4>
+                    <h4 style={{ width: "2.5rem" }}>{sum}</h4>
+                    <h4 style={{ width: "2rem" }}>{number}</h4>
+                  </div>
+                  <div className="button-box">
+                    <button className="submit-button">Submit</button>
+                  </div>
+                  </>
+                )}
+              </div>
+            </div>
           </div>
         </Grid>
       </Modal>
