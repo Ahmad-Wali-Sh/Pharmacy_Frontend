@@ -3,42 +3,83 @@ import Modal from "@material-ui/core/Modal";
 import Grid from "@material-ui/core/Grid";
 import axios from "axios";
 import { ReactSearchAutocomplete } from "react-search-autocomplete";
+import NotificationManager from "react-notifications/lib/NotificationManager";
 
 export default function Add() {
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
 
+  const [open, setOpen] = React.useState(false);
   const [medician, setMedician] = React.useState([]);
   const [kind, setKind] = React.useState([]);
   const [country, setCountry] = React.useState([]);
   const [unit, setUnit] = React.useState([]);
   const [list, setList] = React.useState([]);
-
-  useEffect(() => {
-    axios
-      .get("http://127.0.0.1:8000/api/medician/")
-      .then((data) => setMedician(data));
-  }, []);
-  useEffect(() => {
-    axios.get("http://127.0.0.1:8000/api/kind/").then((data) => setKind(data));
-  }, []);
-  useEffect(() => {
-    axios
-      .get("http://127.0.0.1:8000/api/country/")
-      .then((data) => setCountry(data));
-  }, []);
+  const [mediArray, setMediArray] = React.useState([])
+  const [form, setForm] = React.useState({
+    name: "",
+    code: 0,
+    medician: [],
+    prescription_number: "1304-12-1"
+  })
+  
+  
   useEffect(() => {
     axios.get("http://127.0.0.1:8000/api/unit/").then((data) => setUnit(data));
+    axios.get("http://127.0.0.1:8000/api/country/").then((data) => setCountry(data));
+    axios.get("http://127.0.0.1:8000/api/kind/").then((data) => setKind(data));
+    axios.get("http://127.0.0.1:8000/api/medician/").then((res) => setMedician(res), NotificationManager.info("Data Recieved..."));
   }, []);
+
+
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   const handleSelect = (item) => {
     setList((prev) => [...prev, item]);
+    setMediArray((prev) => [...prev, item.id])
   };
 
-  console.log(list);
+  const handleChange = (event) => {
+    if (event.target.name !== "medician")
+    setForm({
+      ...form,
+     [event.target.name]: event.target.value
+    }) 
+ }
+
+ const PostHandle = async (e) => {
+   e.preventDefault()
+   const postForm = new FormData();
+   postForm.append("name", form.name)
+   postForm.append("code", form.code)
+   for (let i = 0; i < mediArray.length; i++){
+     postForm.append("medician", mediArray[i])
+   }
+   postForm.append("prescription_number", form.prescription_number)
+
+   console.log(postForm)
+
+   try {
+     const response = await axios({
+       method: "POST",
+       url: "http://127.0.0.1:8000/api/prescription/",
+       data: postForm,
+       headers: {
+         'Content-Type': 'Multipart/form-data'
+       }
+     })
+     console.log(response)
+     NotificationManager.success("Data Sent. Successfuly!")
+    } catch (err) {
+     NotificationManager.erorr("Not Sent, Check it again.")
+     console.log(err)
+   }
+ }
+
 
   const formatResult = (item) => {
+
+
     const kindMap = (kindName, url) => {
       return kind.data.map((task) =>
         task.id == item.kind && task.name == kindName
@@ -145,9 +186,6 @@ export default function Add() {
   let sum = 0;
   let number = 0;
 
-  console.log(medician.data);
-  console.log(kind.data);
-  console.log(country.data);
   return (
     <>
       <Grid
@@ -175,12 +213,12 @@ export default function Add() {
             </div>
           </Grid>
           <div>
-            <form>
-              <label>Name: </label>
-              <input type="text" className="inputbox--name"></input>
-              <label>Code: </label>
-              <input type="text" className="inputbox--code"></input>
-            </form>
+            <form onSubmit={PostHandle}>
+              <input type="text" className="inputbox--code" name="code" onChange={handleChange}></input>
+              <label >نام </label>
+              <input type="text" className="inputbox--name" name="name" onChange={handleChange}></input>
+              <label>کد </label>
+            
             <ReactSearchAutocomplete
               items={medician.data}
               fuseOptions={{ keys: ["brand_name"] }}
@@ -190,6 +228,7 @@ export default function Add() {
               showIcon={false}
               maxResults={5}
               onSelect={handleSelect}
+              name="medician"
             />
             <div className="prescription-list">
               {list != "" && (
@@ -202,7 +241,7 @@ export default function Add() {
               {list.map((item) => (
                 <>
                   <div className="flex">
-                    <h4 style={{ width: "5rem" }}>{item.brand_name}</h4>
+                    <h4 style={{ width: "6rem" }}>{item.brand_name}</h4>
                     <h4 style={{ width: "2.3rem" }}>{item.price}</h4>
                     <h4>{item.no_pocket}</h4>
                   </div>
@@ -219,12 +258,13 @@ export default function Add() {
                     <h4 style={{ width: "2rem" }}>{number}</h4>
                   </div>
                   <div className="button-box">
-                    <button className="submit-button">Submit</button>
+                    <button type="submit" className="submit-button">Submit</button>
                   </div>
                   </>
                 )}
               </div>
             </div>
+            </form>
           </div>
         </Grid>
       </Modal>

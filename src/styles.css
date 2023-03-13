@@ -90,22 +90,27 @@ body{
 
 .inputbox--name{
   width:20rem;  
-  height:30px;
-  padding: 10px;
-  margin: 1rem
+  height:2rem;
+  padding: 1rem;
+  margin: 1rem;
+  border-radius: 3rem;
+  text-align: right;
+  unicode-bidi:bidi-override; 
+  direction: RTL;
 }
 
 .inputbox--code{
   width:10rem;  
-  height:30px;
-  padding: 10px;
+  height:2rem;
+  padding: 1rem;
   margin: 1rem;
+  border-radius: 3rem;
 }
 
 .inputbox--prescription{
   width:32rem; 
   height:30px;
-  padding: 10px;
+  padding: 1rem;
   margin: 1rem;
 }
 
@@ -206,5 +211,9 @@ body{
 .button-box{
   width: 100%;
   text-align: right;
+}
 
+label {
+  color: white;
+  font-size: 1.3rem;
 }
